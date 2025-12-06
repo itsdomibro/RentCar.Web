@@ -14,6 +14,6 @@
 
         public ICollection<TrRental> Rentals { get; set; } = new List<TrRental>();
         public ICollection<TrMaintenance> Maintenances { get; set; } = new List<TrMaintenance>();
-        public ICollection<MsCarImage> CarImages { get; set } = new List<MsCarImage>();
+        public ICollection<MsCarImage> CarImages { get; set; } = new List<MsCarImage>();
     }
 }
