@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using RentCar.Web.Data;
 
 namespace RentCar.Web
@@ -15,6 +15,15 @@ namespace RentCar.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddAuthentication("Cookies")
+                .AddCookie("Cookies", options => {
+                    options.LoginPath = "/Auth/Login";
+                    options.LogoutPath = "/Auth/Logout";
+                    options.AccessDeniedPath = "/Auth/AccessDenied";
+                });
+
+            builder.Services.AddAuthorization();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -30,6 +39,7 @@ namespace RentCar.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

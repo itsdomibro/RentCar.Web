@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RentCar.Web.Models;
 
@@ -18,8 +19,12 @@ namespace RentCar.Web.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
+            Console.WriteLine(HttpContext.User.Identity.IsAuthenticated);
+            Console.WriteLine(HttpContext.User.Claims.ToList());
+
             return View();
         }
 
