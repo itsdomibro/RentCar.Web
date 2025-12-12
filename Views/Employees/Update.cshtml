@@ -1,0 +1,30 @@
+﻿@model RentCar.Web.ViewModels.Employee.EmployeeUpdateViewModel
+
+<h2>Edit Employee</h2>
+
+<form asp-action="Update" method="post">
+    <input type="hidden" asp-for="EmployeeId" />
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" />
+        <span asp-validation-for="PhoneNumber"></span>
+    </div>
+    <div>
+        <label asp-for="Position"></label>
+        <input asp-for="Position" />
+        <span asp-validation-for="Position"></span>
+    </div>
+    <button type="submit">Update</button>
+</form>
+
+<a asp-action="Index">Back to List</a>

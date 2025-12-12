@@ -1,8 +1,38 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-4">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb-4">
+            <p class="text-primary fw-semibold mb-2">RentCar</p>
+            <h1 class="display-5 fw-bold mb-3">Drive the car you want, when you want it.</h1>
+            <p class="text-muted mb-4">Browse available cars, rent in minutes, and keep track of maintenances and rentals with a clean, modern dashboard.</p>
+            <div class="d-flex gap-2">
+                <a asp-controller="Cars" asp-action="Index" class="btn btn-primary btn-lg">Browse Cars</a>
+                <a asp-controller="Rentals" asp-action="Index" class="btn btn-outline-secondary btn-lg">View Rentals</a>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <a asp-controller="Cars" asp-action="Create" class="btn w-100 btn-outline-primary">Add New Car</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a asp-controller="Rentals" asp-action="Create" class="btn w-100 btn-outline-success">Start Rental</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a asp-controller="Maintenances" asp-action="Index" class="btn w-100 btn-outline-secondary">Maintenances</a>
+                        </div>
+                        <div class="col-sm-6">
+                            <a asp-controller="Auth" asp-action="Login" class="btn w-100 btn-outline-dark">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

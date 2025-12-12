@@ -1,0 +1,18 @@
+﻿@model RentCar.Web.ViewModels.Maintenances.MaintenanceDetailViewModel
+
+<h2>Maintenance Details</h2>
+
+<p><strong>Date:</strong> @Model.Date.ToShortDateString()</p>
+<p><strong>Description:</strong> @Model.Description</p>
+<p><strong>Cost:</strong> @Model.Cost</p>
+
+<h3>Employee</h3>
+<p>@Model.EmployeeName (@Model.Position) - @Model.EmployeeEmail, @Model.PhoneNumber</p>
+
+<h3>Car</h3>
+<p>@Model.CarName (@Model.CarModel, @Model.CarYear) - @Model.LicensePlate</p>
+<p>Seats: @Model.NumberOfCarSeats, Transmission: @Model.Transmission</p>
+
+<a asp-action="Update" asp-route-id="@Model.MaintenanceId">Edit</a> |
+<a asp-action="Delete" asp-route-id="@Model.MaintenanceId">Delete</a> |
+<a asp-action="Index">Back to List</a>

@@ -48,13 +48,13 @@ namespace RentCar.Web.Controllers
                     PricePerDay = r.Car.PricePerDay,
                     LicensePlate = r.Car.LicensePlate,
                     Transmission = r.Car.Transmission
+                    
                 }).ToListAsync();
 
             var vm = new RentalIndexViewModel { 
                PageNumber = pageNumber,
                PageSize = pageSize,
                TotalRentals = totalRentals,
-
                RentalListItems = rentals
             };
 

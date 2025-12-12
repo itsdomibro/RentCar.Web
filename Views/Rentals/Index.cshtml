@@ -1,40 +1,56 @@
 ﻿@model RentCar.Web.ViewModels.Rental.RentalIndexViewModel
 
-<h2>Rentals</h2>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Rentals</h2>
+            <p class="text-muted mb-0">Recent rental history</p>
+        </div>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Tanggal Sewa</th>
-            <th>Mobil</th>
-            <th>Harga Sewa per Hari</th>
-            <th>Total Hari</th>
-            <th>Total Harga</th>
-            <th>Status Pembayaran</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var rentalItem in Model.RentalListItems) {
-            <tr>
-                <td>@rentalItem.RentalDate.ToString("dd/MM/yyyy") - @rentalItem.ReturnDate.ToString("dd/MM/yyyy")</td>
-                <td>@rentalItem.Model @rentalItem.Year</td>
-                <td>@rentalItem.PricePerDay.ToString("C")</td>
-                <td>@rentalItem.TotalRentalDays</td>
-                <td>@rentalItem.TotalPrice.ToString("C")</td>
-                <td>@(rentalItem.PaymentStatus ? "Sudah Dibayar" : "Belum Dibayar")</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<div>
-    Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalRentals / Model.PageSize))
-</div>
-<div>
-    @if (Model.PageNumber > 1) {
-        <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" class="btn btn-secondary">Previous</a>
-    }
-    @if (Model.PageNumber < Math.Ceiling((double)Model.TotalRentals / Model.PageSize)) {
-        <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" class="btn btn-secondary">Next</a>
-    }
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Rental Dates</th>
+                        <th>Car</th>
+                        <th>Price/Day</th>
+                        <th>Total Days</th>
+                        <th>Total Price</th>
+                        <th>Payment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.RentalListItems.Any()) {
+                        @foreach (var rentalItem in Model.RentalListItems) {
+                            <tr>
+                                <td>@rentalItem.RentalDate.ToString("dd/MM/yyyy") - @rentalItem.ReturnDate.ToString("dd/MM/yyyy")</td>
+                                <td>@rentalItem.Model @rentalItem.Year</td>
+                                <td>@rentalItem.PricePerDay.ToString("C")</td>
+                                <td>@rentalItem.TotalRentalDays</td>
+                                <td class="fw-semibold">@rentalItem.TotalPrice.ToString("C")</td>
+                                <td>
+                                    <span class="badge @(rentalItem.PaymentStatus ? "bg-success" : "bg-warning text-dark")">
+                                        @(rentalItem.PaymentStatus ? "Paid" : "Unpaid")
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">No rentals recorded.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <span>Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalRentals / Model.PageSize))</span>
+            <div class="btn-group">
+                <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" class="btn btn-outline-secondary @(Model.PageNumber <= 1 ? "disabled" : "")">Previous</a>
+                <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" class="btn btn-outline-secondary @(Model.PageNumber >= Math.Ceiling((double)Model.TotalRentals / Model.PageSize) ? "disabled" : "")">Next</a>
+            </div>
+        </div>
+    </div>
 </div>

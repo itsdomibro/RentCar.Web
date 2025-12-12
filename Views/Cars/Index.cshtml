@@ -4,109 +4,117 @@
     ViewData["Title"] = "Cars";
 }
 
-<h2>Available Cars</h2>
+<div class="container py-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
+        <div>
+            <h2 class="mb-0">Available Cars</h2>
+            <p class="text-muted mb-0">Filter by date, year, or price to find the right car.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">Add a Car</a>
+    </div>
 
-<div>
-    <a asp-action="Create" class="btn-success">Add a Car</a>
-</div>
-
-<form asp-action="Index" method="get" class="mb-3">
-    <div class="row">
-        <div class="col-md-3">
-            <label>Pickup Date</label>
-            <input type="date" name="pickupDate" value="@Model.PickupDate?.ToString("yyyy-MM-dd")" class="form-control" />
-        </div>
-        <div class="col-md-3">
-            <label>Return Date</label>
-            <input type="date" name="returnDate" value="@Model.ReturnDate?.ToString("yyyy-MM-dd")" class="form-control" />
-        </div>
-        <div class="col-md-2">
-            <label>Year</label>
-            <input type="number" name="year" value="@Model.Year" class="form-control" />
-        </div>
-        <div class="col-md-2">
-            <label>Sort by Price</label>
-            <div class="col-md-2">
-                <label>Sort by</label>
-                <select name="sortOrder" asp-items="ViewBag.SortOptions" class="form-control"></select>
-            </div>
-        </div>
-        <div class="col-md-2 align-self-end">
-            <button type="submit" class="btn btn-primary">Filter</button>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="Index" method="get" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">Pickup Date</label>
+                    <input type="date" name="pickupDate" value="@Model.PickupDate?.ToString("yyyy-MM-dd")" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Return Date</label>
+                    <input type="date" name="returnDate" value="@Model.ReturnDate?.ToString("yyyy-MM-dd")" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Year</label>
+                    <input type="number" name="year" value="@Model.Year" class="form-control" placeholder="e.g. 2024" />
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Sort by</label>
+                    <select name="sortOrder" asp-items="ViewBag.SortOptions" class="form-select"></select>
+                </div>
+                <div class="col-md-2 d-grid">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </form>
         </div>
     </div>
-</form>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Model</th>
-            <th>Year</th>
-            <th>Seats</th>
-            <th>Transmission</th>
-            <th>Price/Day</th>
-            <th>Status</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var car in Model.Cars)
-        {
-            <tr>
-                <td>
-                    @if (car.ImageUrls != null && car.ImageUrls.Any())
-                    {
-                        <img src="@car.ImageUrls.First()" width="120" class="img-thumbnail" />
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Image</th>
+                        <th>Car</th>
+                        <th>Specs</th>
+                        <th>Price/Day</th>
+                        <th>Status</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Cars.Any()) {
+                        @foreach (var car in Model.Cars) {
+                            <tr>
+                                <td style="width:130px">
+                                    @if (car.ImageUrls != null && car.ImageUrls.Any()) {
+                                        <img src="@car.ImageUrls.First()" width="120" class="img-thumbnail" />
+                                    } else {
+                                        <span class="text-muted">No image</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="fw-semibold">@car.Name</div>
+                                    <div class="text-muted">@car.Model (@car.Year)</div>
+                                    <div class="text-muted small">Plate: @car.LicensePlate</div>
+                                </td>
+                                <td>
+                                    <div>@car.NumberOfCarSeats seats</div>
+                                    <div>@car.Transmission</div>
+                                </td>
+                                <td class="fw-semibold">@car.PricePerDay.ToString("C")</td>
+                                <td>
+                                    <span class="badge @(car.Status ? "bg-success" : "bg-secondary")">
+                                        @(car.Status ? "Available" : "Unavailable")
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-action="Details" asp-route-id="@car.CarId" class="btn btn-outline-secondary">Details</a>
+                                        <a asp-action="Update" asp-route-id="@car.CarId" class="btn btn-outline-primary">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@car.CarId" class="btn btn-outline-danger">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    } else {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">No cars match your filters.</td>
+                        </tr>
                     }
-                    else
-                    {
-                        <span>No image</span>
-                    }
-                </td>
-                <td>@car.Name</td>
-                <td>@car.Model</td>
-                <td>@car.Year</td>
-                <td>@car.NumberOfCarSeats</td>
-                <td>@car.Transmission</td>
-                <td>@car.PricePerDay.ToString("C")</td>
-                <td>@(car.Status ? "Available" : "Unavailable")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@car.CarId" class="btn btn-info btn-sm">Details</a>
-                    <a asp-action="Update" asp-route-id="@car.CarId" class="btn btn-success btn-sm">Update</a>
-                    <a asp-action="Delete" asp-route-id="@car.CarId" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
 
-<div class="d-flex justify-content-between">
-    <span>
-        Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalCars / Model.PageSize))
-    </span>
-    <div>
-        @if (Model.PageNumber > 1)
-        {
-            <a asp-action="Index"
-               asp-route-pageNumber="@(Model.PageNumber - 1)"
-               asp-route-pickupDate="@Model.PickupDate"
-               asp-route-returnDate="@Model.ReturnDate"
-               asp-route-year="@Model.Year"
-               asp-route-sortOrder="@Model.SortOrder"
-               class="btn btn-secondary">Previous</a>
-        }
-        @if (Model.PageNumber < Math.Ceiling((double)Model.TotalCars / Model.PageSize))
-        {
-            <a asp-action="Index"
-               asp-route-pageNumber="@(Model.PageNumber + 1)"
-               asp-route-pickupDate="@Model.PickupDate"
-               asp-route-returnDate="@Model.ReturnDate"
-               asp-route-year="@Model.Year"
-               asp-route-sortOrder="@Model.SortOrder"
-               class="btn btn-secondary">Next</a>
-        }
+        <div class="card-footer d-flex justify-content-between align-items-center">
+            <span>Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalCars / Model.PageSize))</span>
+            <div class="btn-group">
+                <a asp-action="Index"
+                   asp-route-pageNumber="@(Model.PageNumber - 1)"
+                   asp-route-pickupDate="@Model.PickupDate"
+                   asp-route-returnDate="@Model.ReturnDate"
+                   asp-route-year="@Model.Year"
+                   asp-route-sortOrder="@Model.SortOrder"
+                   class="btn btn-outline-secondary @(Model.PageNumber <= 1 ? "disabled" : "")">Previous</a>
+                <a asp-action="Index"
+                   asp-route-pageNumber="@(Model.PageNumber + 1)"
+                   asp-route-pickupDate="@Model.PickupDate"
+                   asp-route-returnDate="@Model.ReturnDate"
+                   asp-route-year="@Model.Year"
+                   asp-route-sortOrder="@Model.SortOrder"
+                   class="btn btn-outline-secondary @(Model.PageNumber >= Math.Ceiling((double)Model.TotalCars / Model.PageSize) ? "disabled" : "")">Next</a>
+            </div>
+        </div>
     </div>
 </div>
 

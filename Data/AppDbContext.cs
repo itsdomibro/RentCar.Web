@@ -84,10 +84,14 @@ namespace RentCar.Web.Data
             // LtPayment
             modelBuilder.Entity<LtPayment>(entity => {
                 entity.HasKey(p => p.PaymentId);
+
                 entity.HasOne(p => p.Rental)
                     .WithMany(r => r.Payments)
                     .HasForeignKey(p => p.RentalId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(p => p.Amount)
+                    .HasPrecision(18, 2);
             });
         }
     }

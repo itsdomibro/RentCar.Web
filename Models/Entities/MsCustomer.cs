@@ -9,6 +9,7 @@
         public string PhoneNumber { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string DriverLicenseNumber { get; set; } = string.Empty;
+        public string Role { get; set; } = "Customer";
 
         public ICollection<TrRental> Rentals { get; set; } = new List<TrRental>();
     }

@@ -66,7 +66,8 @@ namespace RentCar.Web.Controllers
             var claims = new List<Claim> {
                 new Claim(ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
                 new Claim(ClaimTypes.Email, customer.Email),
-                new Claim(ClaimTypes.Name, customer.Name)
+                new Claim(ClaimTypes.Name, customer.Name),
+                new Claim(ClaimTypes.Role, customer.Role)
             };
 
             var identity = new ClaimsIdentity(claims, "Cookies");

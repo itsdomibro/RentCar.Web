@@ -3,38 +3,70 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RentCar.Web</title>
+    <title>@ViewData["Title"] - RentCar</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body { background-color: #f5f6fa; }
+        #wrapper { min-height: 100vh; }
+        #sidebar { width: 240px; }
+        .sidebar-heading { font-weight: 600; letter-spacing: .3px; }
+        .nav-link.active { font-weight: 600; color: #0d6efd !important; }
+    </style>
 </head>
 <body>
     <div class="d-flex" id="wrapper">
         <!-- Sidebar -->
-        <nav id="sidebar" class="bg-light border-end">
-            <div class="sidebar-heading p-3">Navigation</div>
+        <nav id="sidebar" class="bg-white border-end">
+            <div class="p-3 border-bottom">
+                <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark fw-bold">RentCar</a>
+            </div>
+            <div class="sidebar-heading p-3 text-uppercase small text-muted">Navigation</div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Cars" asp-action="Index">Cars</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Cars" ? "active" : "")" asp-controller="Cars" asp-action="Index">Cars</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Rentals" asp-action="Index">Rentals</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Rentals" ? "active" : "")" asp-controller="Rentals" asp-action="Index">Rentals</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Privacy" ? "active" : "")" asp-controller="Home" asp-action="Privacy">Privacy</a>
                 </li>
             </ul>
+
+            @if (User.IsInRole("Owner")) {
+                <div class="sidebar-heading p-3 text-uppercase small text-muted">Owner</div>
+                <ul class="nav flex-column mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Maintenances" ? "active" : "")" asp-controller="Maintenances" asp-action="Index">Maintenances</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Employees" ? "active" : "")" asp-controller="Employees" asp-action="Index">Employees</a>
+                    </li>
+                </ul>
+            }
         </nav>
 
         <!-- Page Content -->
         <div id="page-content-wrapper" class="flex-grow-1">
             <!-- Top Bar -->
-            <nav class="navbar navbar-expand navbar-light bg-white border-bottom">
+            <nav class="navbar navbar-expand navbar-light bg-white border-bottom shadow-sm">
                 <div class="container-fluid">
-                    <button class="btn btn-outline-secondary" id="sidebarToggle">☰</button>
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Register">Register</a></li>
-                        <li class="nav-item"><button class="btn btn-sm btn-light">🌙 Toggle Theme</button></li>
+                    <button class="btn btn-outline-secondary" id="sidebarToggle" type="button">☰</button>
+                    <ul class="navbar-nav ms-auto align-items-center gap-2">
+                        @if (User.Identity.IsAuthenticated) {
+                            <li class="nav-item">
+                                <span class="navbar-text">Hello, @User.Identity.Name!</span>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Logout</button>
+                                </form>
+                            </li>
+                        } else {
+                            <li class="nav-item"><a class="btn btn-sm btn-outline-primary" asp-controller="Auth" asp-action="Login">Login</a></li>
+                            <li class="nav-item"><a class="btn btn-sm btn-primary" asp-controller="Auth" asp-action="Register">Register</a></li>
+                        }
                     </ul>
                 </div>
             </nav>
@@ -48,7 +80,6 @@
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Sidebar toggle script
         document.getElementById("sidebarToggle").addEventListener("click", function () {
             document.getElementById("sidebar").classList.toggle("d-none");
         });

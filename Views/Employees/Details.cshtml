@@ -1,0 +1,33 @@
+﻿@model RentCar.Web.ViewModels.Employee.EmployeeDetailsViewModel
+
+<h2>Employee Details</h2>
+
+<p><strong>Name:</strong> @Model.Name</p>
+<p><strong>Email:</strong> @Model.Email</p>
+<p><strong>Phone:</strong> @Model.PhoneNumber</p>
+<p><strong>Position:</strong> @Model.Position</p>
+<p><strong>Total Maintenances:</strong> @Model.TotalMaintenances</p>
+
+<h3>Maintenances</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Cost</th>
+            <th>Car</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var m in Model.Maintenances) {
+            <tr>
+                <td>@m.Date.ToShortDateString()</td>
+                <td>@m.Cost</td>
+                <td>@m.CarName (@m.CarModel, @m.CarYear)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Update" asp-route-id="@Model.EmployeeId">Edit</a> |
+<a asp-action="Delete" asp-route-id="@Model.EmployeeId">Delete</a> |
+<a asp-action="Index">Back to List</a>

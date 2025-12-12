@@ -4,24 +4,45 @@
     ViewData["Title"] = "Car Details";
 }
 
-<h2>@Model.Name @Model.Model (@Model.Year)</h2>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">@Model.Name @Model.Model (@Model.Year)</h2>
+            <p class="text-muted mb-0">@Model.LicensePlate</p>
+        </div>
+        <div class="btn-group">
+            <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
+            <a asp-controller="Rentals" asp-action="Create" asp-route-id="@Model.CarId" class="btn btn-success">Rent</a>
+            <a asp-action="Update" asp-route-id="@Model.CarId" class="btn btn-outline-primary">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.CarId" class="btn btn-outline-danger">Delete</a>
+        </div>
+    </div>
 
-<p><strong>License Plate:</strong> @Model.LicensePlate</p>
-<p><strong>Seats:</strong> @Model.NumberOfCarSeats</p>
-<p><strong>Transmission:</strong> @Model.Transmission</p>
-<p><strong>Price per Day:</strong> @Model.PricePerDay.ToString("C")</p>
-<p><strong>Status:</strong> @(Model.Status ? "Available" : "Unavailable")</p>
-
-<h4>Images</h4>
-@if (Model.ImageUrls != null && Model.ImageUrls.Any()) {
-    foreach (var url in Model.ImageUrls) {
-        <img src="@url" width="200" class="m-2" />
-    }
-} else {
-    <p>No images available.</p>
-}
-
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
-<a asp-controller="Rentals" asp-action="Create" asp-route-id="@Model.CarId">Rent</a>
-<a asp-action="Update" asp-route-id="@Model.CarId" class="btn btn-success btn-sm">Update</a>
-<a asp-action="Delete" asp-route-id="@Model.CarId" class="btn btn-danger btn-sm">Delete</a>
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <h5>Specs</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li><strong>Seats:</strong> @Model.NumberOfCarSeats</li>
+                        <li><strong>Transmission:</strong> @Model.Transmission</li>
+                        <li><strong>Price per Day:</strong> @Model.PricePerDay.ToString("C")</li>
+                        <li><strong>Status:</strong> @(Model.Status ? "Available" : "Unavailable")</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>Images</h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        @if (Model.ImageUrls != null && Model.ImageUrls.Any()) {
+                            foreach (var url in Model.ImageUrls) {
+                                <img src="@url" width="180" class="img-thumbnail" />
+                            }
+                        } else {
+                            <p class="text-muted mb-0">No images available.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

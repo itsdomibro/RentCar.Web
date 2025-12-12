@@ -1,0 +1,52 @@
+﻿@model RentCar.Web.ViewModels.Employee.EmployeeIndexViewModel
+
+<h2>Employees</h2>
+
+<form method="get" asp-action="Index">
+    <input type="text" name="search" value="@Model.Search" placeholder="Search by name" />
+    <button type="submit">Search</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Position</th>
+            <th>Total Maintenances</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var e in Model.Employees)
+    {
+        <tr>
+            <td>@e.Name</td>
+            <td>@e.Email</td>
+            <td>@e.PhoneNumber</td>
+            <td>@e.Position</td>
+            <td>@e.TotalMaintenances</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@e.EmployeeId">Details</a> |
+                <a asp-action="Update" asp-route-id="@e.EmployeeId">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@e.EmployeeId">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div>
+    Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalEmployees / Model.PageSize))
+    @if (Model.PageNumber > 1)
+    {
+        <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-search="@Model.Search">Prev</a>
+    }
+    @if (Model.PageNumber * Model.PageSize < Model.TotalEmployees)
+    {
+        <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-search="@Model.Search">Next</a>
+    }
+</div>
+
+<a asp-action="Create">Create New Employee</a>
