@@ -2,7 +2,7 @@
 
 namespace RentCar.Web.ViewModels.Car
 {
-    public class CarCreateViewModel
+    public class CarUpdateViewModel
     {
         [Required]
         [StringLength(64, MinimumLength = 1)]
@@ -26,6 +26,9 @@ namespace RentCar.Web.ViewModels.Car
         public decimal PricePerDay { get; set; }
         [Required]
         public bool Status { get; set; }
+        public List<string>? ImageUrls { get; set; }
         public List<IFormFile>? ImageFiles { get; set; }
     }
+
+
 }

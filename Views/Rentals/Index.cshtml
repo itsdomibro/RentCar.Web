@@ -1,0 +1,40 @@
+﻿@model RentCar.Web.ViewModels.Rental.RentalIndexViewModel
+
+<h2>Rentals</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tanggal Sewa</th>
+            <th>Mobil</th>
+            <th>Harga Sewa per Hari</th>
+            <th>Total Hari</th>
+            <th>Total Harga</th>
+            <th>Status Pembayaran</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var rentalItem in Model.RentalListItems) {
+            <tr>
+                <td>@rentalItem.RentalDate.ToString("dd/MM/yyyy") - @rentalItem.ReturnDate.ToString("dd/MM/yyyy")</td>
+                <td>@rentalItem.Model @rentalItem.Year</td>
+                <td>@rentalItem.PricePerDay.ToString("C")</td>
+                <td>@rentalItem.TotalRentalDays</td>
+                <td>@rentalItem.TotalPrice.ToString("C")</td>
+                <td>@(rentalItem.PaymentStatus ? "Sudah Dibayar" : "Belum Dibayar")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalRentals / Model.PageSize))
+</div>
+<div>
+    @if (Model.PageNumber > 1) {
+        <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" class="btn btn-secondary">Previous</a>
+    }
+    @if (Model.PageNumber < Math.Ceiling((double)Model.TotalRentals / Model.PageSize)) {
+        <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" class="btn btn-secondary">Next</a>
+    }
+</div>

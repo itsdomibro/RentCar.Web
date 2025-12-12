@@ -1,0 +1,27 @@
+﻿@model RentCar.Web.ViewModels.Car.CarDetailsViewModel
+
+@{
+    ViewData["Title"] = "Car Details";
+}
+
+<h2>@Model.Name @Model.Model (@Model.Year)</h2>
+
+<p><strong>License Plate:</strong> @Model.LicensePlate</p>
+<p><strong>Seats:</strong> @Model.NumberOfCarSeats</p>
+<p><strong>Transmission:</strong> @Model.Transmission</p>
+<p><strong>Price per Day:</strong> @Model.PricePerDay.ToString("C")</p>
+<p><strong>Status:</strong> @(Model.Status ? "Available" : "Unavailable")</p>
+
+<h4>Images</h4>
+@if (Model.ImageUrls != null && Model.ImageUrls.Any()) {
+    foreach (var url in Model.ImageUrls) {
+        <img src="@url" width="200" class="m-2" />
+    }
+} else {
+    <p>No images available.</p>
+}
+
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<a asp-controller="Rentals" asp-action="Create" asp-route-id="@Model.CarId">Rent</a>
+<a asp-action="Update" asp-route-id="@Model.CarId" class="btn btn-success btn-sm">Update</a>
+<a asp-action="Delete" asp-route-id="@Model.CarId" class="btn btn-danger btn-sm">Delete</a>
