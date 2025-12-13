@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RentCar.Web.ViewModels.Rental
+namespace RentCar.Web.ViewModels.MyRental
 {
-    public class RentalCreateViewModel
+    public class MyRentalCreateViewModel
     {
         public Guid CarId { get; set; }
 

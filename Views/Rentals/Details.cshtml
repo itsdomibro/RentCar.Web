@@ -1,0 +1,66 @@
+﻿@model RentCar.Web.ViewModels.Rentals.RentalDetailsViewModel
+
+@{
+    ViewData["Title"] = "Rental Details";
+}
+
+<h2>Rental Details</h2>
+
+<dl>
+    <dt>Rental Date</dt>
+    <dd>@Model.RentalDate</dd>
+    <dt>Return Date</dt>
+    <dd>@Model.ReturnDate</dd>
+    <dt>Total Price</dt>
+    <dd>@Model.TotalPrice.ToString("C")</dd>
+    <dt>Status</dt>
+    <dd>@(Model.PaymentStatus ? "Paid" : "Unpaid")</dd>
+</dl>
+
+<h3>Customer</h3>
+<dl>
+    <dt>Name</dt>
+    <dd>@Model.CustomerName</dd>
+    <dt>Email</dt>
+    <dd>@Model.Email</dd>
+    <dt>Phone</dt>
+    <dd>@Model.PhoneNumber</dd>
+    <dt>Address</dt>
+    <dd>@Model.Address</dd>
+    <dt>License</dt>
+    <dd>@Model.DriverLicenseNumber</dd>
+</dl>
+
+<h3>Car</h3>
+<dl>
+    <dt>Name</dt>
+    <dd>@Model.CarName</dd>
+    <dt>Model</dt>
+    <dd>@Model.Model</dd>
+    <dt>Year</dt>
+    <dd>@Model.Year</dd>
+    <dt>Plate</dt>
+    <dd>@Model.LicensePlate</dd>
+    <dt>Seats</dt>
+    <dd>@Model.NumberOfCarSeats</dd>
+    <dt>Transmission</dt>
+    <dd>@Model.Transmission</dd>
+</dl>
+
+<h3>Payments</h3>
+<table>
+    <thead>
+        <tr><th>Date</th><th>Amount</th><th>Method</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Payments) {
+            <tr>
+                <td>@p.Date.ToShortDateString()</td>
+                <td>@p.Amount.ToString("C")</td>
+                <td>@p.PaymentMethod</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index">Back to List</a>

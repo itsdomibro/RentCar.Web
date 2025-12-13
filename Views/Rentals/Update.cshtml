@@ -1,13 +1,14 @@
-﻿@model RentCar.Web.ViewModels.Rentals.CreateRentalViewModel
+﻿@model RentCar.Web.ViewModels.Rentals.UpdateRentalViewModel
 
 @{
-    ViewData["Title"] = "Create Rental";
+    ViewData["Title"] = "Update Rental";
 }
 
-<h2>Create Rental</h2>
+<h2>Update Rental</h2>
 
-<form asp-action="Create" method="post">
+<form asp-action="Update" method="post">
     @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="RentalId" />
 
     <label asp-for="RentalDate"></label>
     <input asp-for="RentalDate" type="date" />
@@ -32,6 +33,6 @@
     <select asp-for="CarId" asp-items="Model.Cars"></select>
     <span asp-validation-for="CarId"></span>
 
-    <button type="submit">Save</button>
+    <button type="submit">Update</button>
     <a asp-action="Index">Cancel</a>
 </form>

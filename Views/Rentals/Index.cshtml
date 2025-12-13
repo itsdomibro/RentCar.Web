@@ -1,56 +1,54 @@
-﻿@model RentCar.Web.ViewModels.Rental.RentalIndexViewModel
+﻿@model RentCar.Web.ViewModels.Rentals.RentalIndexViewModel
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div>
-            <h2 class="mb-0">Rentals</h2>
-            <p class="text-muted mb-0">Recent rental history</p>
-        </div>
-    </div>
+@{
+    ViewData["Title"] = "Rentals";
+}
 
-    <div class="card shadow-sm">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Rental Dates</th>
-                        <th>Car</th>
-                        <th>Price/Day</th>
-                        <th>Total Days</th>
-                        <th>Total Price</th>
-                        <th>Payment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.RentalListItems.Any()) {
-                        @foreach (var rentalItem in Model.RentalListItems) {
-                            <tr>
-                                <td>@rentalItem.RentalDate.ToString("dd/MM/yyyy") - @rentalItem.ReturnDate.ToString("dd/MM/yyyy")</td>
-                                <td>@rentalItem.Model @rentalItem.Year</td>
-                                <td>@rentalItem.PricePerDay.ToString("C")</td>
-                                <td>@rentalItem.TotalRentalDays</td>
-                                <td class="fw-semibold">@rentalItem.TotalPrice.ToString("C")</td>
-                                <td>
-                                    <span class="badge @(rentalItem.PaymentStatus ? "bg-success" : "bg-warning text-dark")">
-                                        @(rentalItem.PaymentStatus ? "Paid" : "Unpaid")
-                                    </span>
-                                </td>
-                            </tr>
-                        }
-                    } else {
-                        <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">No rentals recorded.</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-        <div class="card-footer d-flex justify-content-between align-items-center">
-            <span>Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalRentals / Model.PageSize))</span>
-            <div class="btn-group">
-                <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" class="btn btn-outline-secondary @(Model.PageNumber <= 1 ? "disabled" : "")">Previous</a>
-                <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" class="btn btn-outline-secondary @(Model.PageNumber >= Math.Ceiling((double)Model.TotalRentals / Model.PageSize) ? "disabled" : "")">Next</a>
-            </div>
-        </div>
-    </div>
-</div>
+<h2>Rentals</h2>
+
+<form method="get" class="filter-form">
+    <input type="text" name="searchTerm" value="@Model.SearchTerm" placeholder="Search by email, car..." />
+    <select name="paymentStatus">
+        <option value="">All</option>
+        <option value="true" selected="@(Model.PaymentStatusFilter == true)">Paid</option>
+        <option value="false" selected="@(Model.PaymentStatusFilter == false)">Unpaid</option>
+    </select>
+    <input type="date" name="rentalDateFrom" value="@(Model.RentalDateFrom?.ToString("yyyy-MM-dd"))" />
+    <input type="date" name="rentalDateTo" value="@(Model.RentalDateTo?.ToString("yyyy-MM-dd"))" />
+    <button type="submit">Filter</button>
+</form>
+
+<table class="rentals-table">
+    <thead>
+        <tr>
+            <th><a asp-action="Index" asp-route-sortBy="RentalDate" asp-route-sortDesc="@(Model.SortBy=="RentalDate" ? !Model.SortDescending : false)">Rental Date</a></th>
+            <th><a asp-action="Index" asp-route-sortBy="ReturnDate" asp-route-sortDesc="@(Model.SortBy=="ReturnDate" ? !Model.SortDescending : false)">Return Date</a></th>
+            <th><a asp-action="Index" asp-route-sortBy="TotalPrice" asp-route-sortDesc="@(Model.SortBy=="TotalPrice" ? !Model.SortDescending : false)">Total Price</a></th>
+            <th>Email</th>
+            <th>Car</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var rental in Model.Rentals)
+    {
+        <tr>
+            <td>@rental.RentalDate.ToShortDateString()</td>
+            <td>@rental.ReturnDate.ToShortDateString()</td>
+            <td>@rental.TotalPrice.ToString("C")</td>
+            <td>@rental.Email</td>
+            <td>@rental.Name @rental.Model (@rental.Year)</td>
+            <td>@(rental.PaymentStatus ? "Paid" : "Unpaid")</td>
+            <td>
+                <a asp-controller="Payments" asp-action="Create" asp-route-rentalId="@rental.RentalId">Make Payment</a>
+                <a asp-action="Details" asp-route-id="@rental.RentalId">Details</a> |
+                <a asp-action="Update" asp-route-id="@rental.RentalId">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@rental.RentalId">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<a asp-action="Create">Create New Rental</a>

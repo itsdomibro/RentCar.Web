@@ -18,8 +18,7 @@ namespace RentCar.Web
             builder.Services.AddAuthentication("Cookies")
                 .AddCookie("Cookies", options => {
                     options.LoginPath = "/Auth/Login";
-                    options.LogoutPath = "/Auth/Logout";
-                    options.AccessDeniedPath = "/Auth/AccessDenied";
+                    options.AccessDeniedPath = "/Auth";
                 });
 
             builder.Services.AddAuthorization();
@@ -44,7 +43,7 @@ namespace RentCar.Web
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Cars}/{action=Index}/{id?}");
 
             app.Run();
         }

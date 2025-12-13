@@ -1,0 +1,51 @@
+﻿@model RentCar.Web.ViewModels.MyRental.MyRentalCreateViewModel
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="mb-0">Rent @Model.Name @Model.Model</h2>
+            <p class="text-muted mb-0">Price per day: @Model.PricePerDay.ToString("C")</p>
+        </div>
+        <a asp-controller="Cars" asp-action="Details" asp-route-id="@Model.CarId" class="btn btn-outline-secondary">Back to car</a>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <div class="d-flex flex-wrap gap-2">
+                @if (Model.ImageUrls.Any()) {
+                    foreach (var url in Model.ImageUrls) {
+                        <img src="@url" width="150" class="img-thumbnail" />
+                    }
+                } else {
+                    <p class="text-muted mb-0">No images available.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Create" method="post" class="row g-3" asp-antiforgery="true">
+                <input type="hidden" asp-for="CarId" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="col-md-6">
+                    <label asp-for="RentalDate" class="form-label"></label>
+                    <input asp-for="RentalDate" type="date" class="form-control" />
+                    <span asp-validation-for="RentalDate" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ReturnDate" class="form-label"></label>
+                    <input asp-for="ReturnDate" type="date" class="form-control" />
+                    <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 d-flex gap-2">
+                    <button type="submit" class="btn btn-success">Confirm Rental</button>
+                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@Model.CarId" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

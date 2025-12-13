@@ -1,8 +1,7 @@
-﻿using RentCar.Web.Models.Entities;
-
-namespace RentCar.Web.ViewModels.Rental
+﻿
+namespace RentCar.Web.ViewModels.MyRental
 {
-    public class RentalIndexViewModel
+    public class MyRentalIndexViewModel
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

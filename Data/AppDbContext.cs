@@ -89,9 +89,6 @@ namespace RentCar.Web.Data
                     .WithMany(r => r.Payments)
                     .HasForeignKey(p => p.RentalId)
                     .OnDelete(DeleteBehavior.Cascade);
-
-                entity.Property(p => p.Amount)
-                    .HasPrecision(18, 2);
             });
         }
     }
