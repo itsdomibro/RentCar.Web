@@ -4,34 +4,77 @@
     ViewData["Title"] = "Create Rental";
 }
 
-<h2>Create Rental</h2>
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Create Rental</h1>
+            <p class="page-subtitle">Create a new rental record</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+    </div>
 
-<form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
+    <div class="view-card">
+        <form asp-action="Create" method="post" class="view-form" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-    <label asp-for="RentalDate"></label>
-    <input asp-for="RentalDate" type="date" />
-    <span asp-validation-for="RentalDate"></span>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="RentalDate" class="form-label">Rental Date</label>
+                    <input asp-for="RentalDate" type="date" class="form-control" />
+                    <span asp-validation-for="RentalDate" class="text-danger"></span>
+                </div>
 
-    <label asp-for="ReturnDate"></label>
-    <input asp-for="ReturnDate" type="date" />
-    <span asp-validation-for="ReturnDate"></span>
+                <div class="form-group">
+                    <label asp-for="ReturnDate" class="form-label">Return Date</label>
+                    <input asp-for="ReturnDate" type="date" class="form-control" />
+                    <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                </div>
+            </div>
 
-    <label asp-for="TotalPrice"></label>
-    <input asp-for="TotalPrice" />
-    <span asp-validation-for="TotalPrice"></span>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="TotalPrice" class="form-label">Total Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input asp-for="TotalPrice" class="form-control" />
+                    </div>
+                    <span asp-validation-for="TotalPrice" class="text-danger"></span>
+                </div>
 
-    <label asp-for="PaymentStatus"></label>
-    <input asp-for="PaymentStatus" type="checkbox" />
+                <div class="form-group">
+                    <div class="form-check">
+                        <input asp-for="PaymentStatus" type="checkbox" class="form-check-input" />
+                        <label asp-for="PaymentStatus" class="form-check-label">Payment Status</label>
+                    </div>
+                </div>
+            </div>
 
-    <label asp-for="CustomerId"></label>
-    <select asp-for="CustomerId" asp-items="Model.Customers"></select>
-    <span asp-validation-for="CustomerId"></span>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="CustomerId" class="form-label">Customer</label>
+                    <select asp-for="CustomerId" asp-items="Model.Customers" class="form-select">
+                        <option value="">Select a customer</option>
+                    </select>
+                    <span asp-validation-for="CustomerId" class="text-danger"></span>
+                </div>
 
-    <label asp-for="CarId"></label>
-    <select asp-for="CarId" asp-items="Model.Cars"></select>
-    <span asp-validation-for="CarId"></span>
+                <div class="form-group">
+                    <label asp-for="CarId" class="form-label">Car</label>
+                    <select asp-for="CarId" asp-items="Model.Cars" class="form-select">
+                        <option value="">Select a car</option>
+                    </select>
+                    <span asp-validation-for="CarId" class="text-danger"></span>
+                </div>
+            </div>
 
-    <button type="submit">Save</button>
-    <a asp-action="Index">Cancel</a>
-</form>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

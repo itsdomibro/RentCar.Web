@@ -4,86 +4,97 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RentCar</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <style>
-        body { background-color: #f5f6fa; }
-        #wrapper { min-height: 100vh; }
-        #sidebar { width: 240px; }
-        .sidebar-heading { font-weight: 600; letter-spacing: .3px; }
-        .nav-link.active { font-weight: 600; color: #0d6efd !important; }
-    </style>
+    <link rel="stylesheet" href="~/css/views.css" asp-append-version="true" />
 </head>
-<body>
-    <div class="d-flex" id="wrapper">
-        <!-- Sidebar -->
-        <nav id="sidebar" class="bg-white border-end">
-            <div class="p-3 border-bottom">
-                <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark fw-bold">RentCar</a>
-            </div>
-            <div class="sidebar-heading p-3 text-uppercase small text-muted">Navigation</div>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Cars" ? "active" : "")" asp-controller="Cars" asp-action="Index">Cars</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Rentals" ? "active" : "")" asp-controller="Rentals" asp-action="Index">Rentals</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Privacy" ? "active" : "")" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </li>
-            </ul>
 
-            @if (User.IsInRole("Owner")) {
-                <div class="sidebar-heading p-3 text-uppercase small text-muted">Owner</div>
-                <ul class="nav flex-column mb-3">
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Maintenances" ? "active" : "")" asp-controller="Maintenances" asp-action="Index">Maintenances</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Employees" ? "active" : "")" asp-controller="Employees" asp-action="Index">Employees</a>
-                    </li>
-                </ul>
-            }
+<body>
+    <div id="wrapper">
+        @* Side Bar *@
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <a asp-controller="Cars" asp-action="Index" class="sidebar-brand">RentCar</a>
+            </div>
+                
+            <div class="sidebar-content">
+                @if (!User.IsInRole("Owner")) {
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Cars" ? "active" : "")" asp-controller="Cars" asp-action="Index">Cars</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "MyRentals" ? "active" : "")" asp-controller="MyRentals" asp-action="Index">My Rentals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Contact" ? "active" : "")" asp-controller="Contact" asp-action="Index">Contact</a>
+                        </li>
+                    </ul>
+                }
+
+                @if (User.IsInRole("Owner")) {
+                    <ul class="nav-list">
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Cars" ? "active" : "")" asp-controller="Cars" asp-action="Index">Cars</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Rentals" ? "active" : "")" asp-controller="Rentals" asp-action="Index">Rentals</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Maintenances" ? "active" : "")" asp-controller="Maintenances" asp-action="Index">Maintenances</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Employees" ? "active" : "")" asp-controller="Employees" asp-action="Index">Employees</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Payments" ? "active" : "")" asp-controller="Payments" asp-action="Index">Payments</a>
+                        </li>
+                    </ul>
+                }
+            </div>
+
+            <div class="sidebar-footer"></div>
+
         </nav>
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper" class="flex-grow-1">
-            <!-- Top Bar -->
-            <nav class="navbar navbar-expand navbar-light bg-white border-bottom shadow-sm">
-                <div class="container-fluid">
-                    <button class="btn btn-outline-secondary" id="sidebarToggle" type="button">☰</button>
-                    <ul class="navbar-nav ms-auto align-items-center gap-2">
+        @* Content *@
+        <div id="page-content-wrapper">
+            @* Top Bar *@
+            <nav class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle" type="button">☰</button>
+                </div>
+
+                <div class="topbar-right">
+                    <ul class="topbar-nav">
                         @if (User.Identity.IsAuthenticated) {
-                            <li class="nav-item">
-                                <span class="navbar-text">Hello, @User.Identity.Name!</span>
-                            </li>
-                            <li class="nav-item">
-                                <form asp-controller="Auth" asp-action="Logout" method="post" class="d-inline">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Logout</button>
-                                </form>
+                            <li class="topbar-item">
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Profile" asp-action="Index">Hello, @User.Identity.Name!</a>
                             </li>
                         } else {
-                            <li class="nav-item"><a class="btn btn-sm btn-outline-primary" asp-controller="Auth" asp-action="Login">Login</a></li>
-                            <li class="nav-item"><a class="btn btn-sm btn-primary" asp-controller="Auth" asp-action="Register">Register</a></li>
+                            <li class="topbar-item">
+                                <a class="btn btn-sm btn-outline-primary" asp-controller="Auth" asp-action="Login">Login</a>
+                            </li>
+                            <li class="topbar-item">
+                                <a class="btn btn-sm btn-primary" asp-controller="Auth" asp-action="Register">Register</a>
+                             </li>
                         }
                     </ul>
                 </div>
             </nav>
 
-            <!-- Main Content -->
-            <div class="container-fluid p-4">
+            @* Main Content *@
+            <div class="main-content">
                 @RenderBody()
             </div>
         </div>
     </div>
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.getElementById("sidebarToggle").addEventListener("click", function () {
-            document.getElementById("sidebar").classList.toggle("d-none");
+            document.getElementById("sidebar").classList.toggle("hidden");
         });
     </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

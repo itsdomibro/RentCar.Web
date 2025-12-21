@@ -4,30 +4,50 @@
     ViewData["Title"] = "Profile";
 }
 
-<h2>Profile</h2>
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Profile</h1>
+            <p class="page-subtitle">Your account information</p>
+        </div>
+        <div class="action-buttons">
+            <a asp-action="Update" class="btn btn-primary">Edit Profile</a>
+            <a asp-action="ChangePassword" class="btn btn-outline-secondary">Change Password</a>
+        </div>
+    </div>
 
-<div class="card">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Name</dt>
-            <dd class="col-sm-9">@Model.Name</dd>
+    <div class="view-card">
+        <div class="details-list">
+            <div class="details-item">
+                <div class="details-label">Name</div>
+                <div class="details-value">@Model.Name</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Email</div>
+                <div class="details-value">@Model.Email</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Phone Number</div>
+                <div class="details-value">@Model.PhoneNumber</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Address</div>
+                <div class="details-value">@Model.Address</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Driver License</div>
+                <div class="details-value">@Model.DriverLicenseNumber</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Role</div>
+                <div class="details-value">@Model.Role</div>
+            </div>
+        </div>
+    </div>
 
-            <dt class="col-sm-3">Email</dt>
-            <dd class="col-sm-9">@Model.Email</dd>
-
-            <dt class="col-sm-3">Phone Number</dt>
-            <dd class="col-sm-9">@Model.PhoneNumber</dd>
-
-            <dt class="col-sm-3">Address</dt>
-            <dd class="col-sm-9">@Model.Address</dd>
-
-            <dt class="col-sm-3">Driver License</dt>
-            <dd class="col-sm-9">@Model.DriverLicenseNumber</dd>
-
-            <dt class="col-sm-3">Role</dt>
-            <dd class="col-sm-9">@Model.Role</dd>
-        </dl>
-        <a asp-action="Update" class="btn btn-primary">Edit Profile</a>
-        <a asp-action="ChangePassword" class="btn btn-warning">Change Password</a>
+    <div class="view-card">
+        <form asp-controller="Auth" asp-action="Logout" method="post" style="text-align: center;">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
     </div>
 </div>

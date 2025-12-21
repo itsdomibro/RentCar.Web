@@ -4,45 +4,53 @@
     ViewData["Title"] = "Car Details";
 }
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+<div class="page-container">
+    <div class="page-header">
         <div>
-            <h2 class="mb-0">@Model.Name @Model.Model (@Model.Year)</h2>
-            <p class="text-muted mb-0">@Model.LicensePlate</p>
+            <h1 class="page-title">@Model.Name @Model.Model (@Model.Year)</h1>
+            <p class="page-subtitle">@Model.LicensePlate</p>
         </div>
-        <div class="btn-group">
+        <div class="action-buttons">
             <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
-            <a asp-controller="Rentals" asp-action="Create" asp-route-id="@Model.CarId" class="btn btn-success">Rent</a>
-            <a asp-action="Update" asp-route-id="@Model.CarId" class="btn btn-outline-primary">Edit</a>
-            <a asp-action="Delete" asp-route-id="@Model.CarId" class="btn btn-outline-danger">Delete</a>
+            <a asp-controller="MyRentals" asp-action="Create" asp-route-id="@Model.CarId" class="btn btn-primary">Rent</a>
+            <a asp-action="Update" asp-route-id="@Model.CarId" class="btn btn-primary">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.CarId" class="btn btn-danger">Delete</a>
         </div>
     </div>
 
-    <div class="card shadow-sm mb-3">
-        <div class="card-body">
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <h5>Specs</h5>
-                    <ul class="list-unstyled mb-0">
-                        <li><strong>Seats:</strong> @Model.NumberOfCarSeats</li>
-                        <li><strong>Transmission:</strong> @Model.Transmission</li>
-                        <li><strong>Price per Day:</strong> @Model.PricePerDay.ToString("C")</li>
-                        <li><strong>Status:</strong> @(Model.Status ? "Available" : "Unavailable")</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h5>Images</h5>
-                    <div class="d-flex flex-wrap gap-2">
-                        @if (Model.ImageUrls != null && Model.ImageUrls.Any()) {
-                            foreach (var url in Model.ImageUrls) {
-                                <img src="@url" width="180" class="img-thumbnail" />
-                            }
-                        } else {
-                            <p class="text-muted mb-0">No images available.</p>
-                        }
-                    </div>
+    <div class="view-card">
+        <div class="details-list">
+            <div class="details-item">
+                <div class="details-label">Seats</div>
+                <div class="details-value">@Model.NumberOfCarSeats</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Transmission</div>
+                <div class="details-value">@Model.Transmission</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Price per Day</div>
+                <div class="details-value">@Model.PricePerDay.ToString("C")</div>
+            </div>
+            <div class="details-item">
+                <div class="details-label">Status</div>
+                <div class="details-value">
+                    <span class="badge @(Model.Status ? "badge-success" : "badge-secondary")">
+                        @(Model.Status ? "Available" : "Unavailable")
+                    </span>
                 </div>
             </div>
         </div>
     </div>
+
+    @if (Model.ImageUrls != null && Model.ImageUrls.Any()) {
+        <div class="view-card">
+            <h2 class="card-title">Images</h2>
+            <div class="image-gallery">
+                @foreach (var url in Model.ImageUrls) {
+                    <img src="@url" />
+                }
+            </div>
+        </div>
+    }
 </div>

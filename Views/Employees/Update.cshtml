@@ -1,30 +1,59 @@
 ﻿@model RentCar.Web.ViewModels.Employee.EmployeeUpdateViewModel
 
-<h2>Edit Employee</h2>
+@{
+    ViewData["Title"] = "Update Employee";
+}
 
-<form asp-action="Update" method="post">
-    <input type="hidden" asp-for="EmployeeId" />
-    <div>
-        <label asp-for="Name"></label>
-        <input asp-for="Name" />
-        <span asp-validation-for="Name"></span>
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Update Employee</h1>
+            <p class="page-subtitle">Edit employee information</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
     </div>
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
-    </div>
-    <div>
-        <label asp-for="PhoneNumber"></label>
-        <input asp-for="PhoneNumber" />
-        <span asp-validation-for="PhoneNumber"></span>
-    </div>
-    <div>
-        <label asp-for="Position"></label>
-        <input asp-for="Position" />
-        <span asp-validation-for="Position"></span>
-    </div>
-    <button type="submit">Update</button>
-</form>
 
-<a asp-action="Index">Back to List</a>
+    <div class="view-card">
+        <form asp-action="Update" method="post" class="view-form" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <input type="hidden" asp-for="EmployeeId" />
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Position" class="form-label">Position</label>
+                    <input asp-for="Position" class="form-control" />
+                    <span asp-validation-for="Position" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

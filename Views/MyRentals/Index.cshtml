@@ -1,53 +1,56 @@
 ﻿@model RentCar.Web.ViewModels.MyRental.MyRentalIndexViewModel
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
+@{
+    ViewData["Title"] = "My Rentals";
+}
+
+<div class="page-container">
+    <div class="page-header">
         <div>
-            <h2 class="mb-0">Rentals</h2>
-            <p class="text-muted mb-0">Recent rental history</p>
+            <h1 class="page-title">My Rentals</h1>
+            <p class="page-subtitle">Recent rental history</p>
         </div>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Rental Dates</th>
-                        <th>Car</th>
-                        <th>Price/Day</th>
-                        <th>Total Days</th>
-                        <th>Total Price</th>
-                        <th>Payment</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.RentalListItems.Any()) {
-                        @foreach (var rentalItem in Model.RentalListItems) {
-                            <tr>
-                                <td>@rentalItem.RentalDate.ToString("dd/MM/yyyy") - @rentalItem.ReturnDate.ToString("dd/MM/yyyy")</td>
-                                <td>@rentalItem.Model @rentalItem.Year</td>
-                                <td>@rentalItem.PricePerDay.ToString("C")</td>
-                                <td>@rentalItem.TotalRentalDays</td>
-                                <td class="fw-semibold">@rentalItem.TotalPrice.ToString("C")</td>
-                                <td>
-                                    <span class="badge @(rentalItem.PaymentStatus ? "bg-success" : "bg-warning text-dark")">
-                                        @(rentalItem.PaymentStatus ? "Paid" : "Unpaid")
-                                    </span>
-                                </td>
-                            </tr>
-                        }
-                    } else {
+    <div class="view-card">
+        <table class="view-table">
+            <thead>
+                <tr>
+                    <th>Rental Dates</th>
+                    <th>Car</th>
+                    <th>Price/Day</th>
+                    <th>Total Days</th>
+                    <th>Total Price</th>
+                    <th>Payment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.RentalListItems.Any()) {
+                    @foreach (var rentalItem in Model.RentalListItems) {
                         <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">No rentals recorded.</td>
+                            <td>@rentalItem.RentalDate.ToString("dd/MM/yyyy") - @rentalItem.ReturnDate.ToString("dd/MM/yyyy")</td>
+                            <td>@rentalItem.Model @rentalItem.Year</td>
+                            <td>@rentalItem.PricePerDay.ToString("C")</td>
+                            <td>@rentalItem.TotalRentalDays</td>
+                            <td style="font-weight: 600;">@rentalItem.TotalPrice.ToString("C")</td>
+                            <td>
+                                <span class="badge @(rentalItem.PaymentStatus ? "badge-success" : "badge-warning")">
+                                    @(rentalItem.PaymentStatus ? "Paid" : "Unpaid")
+                                </span>
+                            </td>
                         </tr>
                     }
-                </tbody>
-            </table>
-        </div>
-        <div class="card-footer d-flex justify-content-between align-items-center">
-            <span>Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalRentals / Model.PageSize))</span>
-            <div class="btn-group">
+                } else {
+                    <tr>
+                        <td colspan="6" class="empty-state">No rentals recorded.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <div class="pagination-info">Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalRentals / Model.PageSize))</div>
+            <div class="pagination-buttons">
                 <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" class="btn btn-outline-secondary @(Model.PageNumber <= 1 ? "disabled" : "")">Previous</a>
                 <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" class="btn btn-outline-secondary @(Model.PageNumber >= Math.Ceiling((double)Model.TotalRentals / Model.PageSize) ? "disabled" : "")">Next</a>
             </div>

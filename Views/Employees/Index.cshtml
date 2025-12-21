@@ -1,52 +1,74 @@
 ﻿@model RentCar.Web.ViewModels.Employee.EmployeeIndexViewModel
 
-<h2>Employees</h2>
+@{
+    ViewData["Title"] = "Employees";
+}
 
-<form method="get" asp-action="Index">
-    <input type="text" name="search" value="@Model.Search" placeholder="Search by name" />
-    <button type="submit">Search</button>
-</form>
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Employees</h1>
+            <p class="page-subtitle">Manage employee records</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">Create New Employee</a>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Position</th>
-            <th>Total Maintenances</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var e in Model.Employees)
-    {
-        <tr>
-            <td>@e.Name</td>
-            <td>@e.Email</td>
-            <td>@e.PhoneNumber</td>
-            <td>@e.Position</td>
-            <td>@e.TotalMaintenances</td>
-            <td>
-                <a asp-action="Details" asp-route-id="@e.EmployeeId">Details</a> |
-                <a asp-action="Update" asp-route-id="@e.EmployeeId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@e.EmployeeId">Delete</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
+    <div class="view-card">
+        <form method="get" asp-action="Index" class="filter-form">
+            <div class="form-group">
+                <label class="form-label">Search by name</label>
+                <input type="text" name="search" value="@Model.Search" class="form-control" placeholder="Employee name" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+    </div>
 
-<div>
-    Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalEmployees / Model.PageSize))
-    @if (Model.PageNumber > 1)
-    {
-        <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-search="@Model.Search">Prev</a>
-    }
-    @if (Model.PageNumber * Model.PageSize < Model.TotalEmployees)
-    {
-        <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-search="@Model.Search">Next</a>
-    }
+    <div class="view-card">
+        <table class="view-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Position</th>
+                    <th>Total Maintenances</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Employees.Any()) {
+                    @foreach (var e in Model.Employees) {
+                        <tr>
+                            <td>@e.Name</td>
+                            <td>@e.Email</td>
+                            <td>@e.PhoneNumber</td>
+                            <td>@e.Position</td>
+                            <td>@e.TotalMaintenances</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a asp-action="Details" asp-route-id="@e.EmployeeId" class="btn btn-outline-secondary">Details</a>
+                                    <a asp-action="Update" asp-route-id="@e.EmployeeId" class="btn btn-primary">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@e.EmployeeId" class="btn btn-danger">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                } else {
+                    <tr>
+                        <td colspan="6" class="empty-state">No employees found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <div class="pagination-info">Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalEmployees / Model.PageSize))</div>
+            <div class="pagination-buttons">
+                <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber - 1)" asp-route-search="@Model.Search" class="btn btn-outline-secondary @(Model.PageNumber <= 1 ? "disabled" : "")">Previous</a>
+                <a asp-action="Index" asp-route-pageNumber="@(Model.PageNumber + 1)" asp-route-search="@Model.Search" class="btn btn-outline-secondary @(Model.PageNumber * Model.PageSize >= Model.TotalEmployees ? "disabled" : "")">Next</a>
+            </div>
+        </div>
+    </div>
 </div>
-
-<a asp-action="Create">Create New Employee</a>

@@ -4,51 +4,86 @@
     ViewData["Title"] = "Rentals";
 }
 
-<h2>Rentals</h2>
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Rentals</h1>
+            <p class="page-subtitle">Manage rental records</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">Create New Rental</a>
+    </div>
 
-<form method="get" class="filter-form">
-    <input type="text" name="searchTerm" value="@Model.SearchTerm" placeholder="Search by email, car..." />
-    <select name="paymentStatus">
-        <option value="">All</option>
-        <option value="true" selected="@(Model.PaymentStatusFilter == true)">Paid</option>
-        <option value="false" selected="@(Model.PaymentStatusFilter == false)">Unpaid</option>
-    </select>
-    <input type="date" name="rentalDateFrom" value="@(Model.RentalDateFrom?.ToString("yyyy-MM-dd"))" />
-    <input type="date" name="rentalDateTo" value="@(Model.RentalDateTo?.ToString("yyyy-MM-dd"))" />
-    <button type="submit">Filter</button>
-</form>
+    <div class="view-card">
+        <form method="get" asp-action="Index" class="filter-form">
+            <div class="form-group">
+                <label class="form-label">Search</label>
+                <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Search by email, car..." />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Payment Status</label>
+                <select name="paymentStatus" class="form-select">
+                    <option value="">All</option>
+                    <option value="true" selected="@(Model.PaymentStatusFilter == true)">Paid</option>
+                    <option value="false" selected="@(Model.PaymentStatusFilter == false)">Unpaid</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Rental Date From</label>
+                <input type="date" name="rentalDateFrom" value="@(Model.RentalDateFrom?.ToString("yyyy-MM-dd"))" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Rental Date To</label>
+                <input type="date" name="rentalDateTo" value="@(Model.RentalDateTo?.ToString("yyyy-MM-dd"))" class="form-control" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+    </div>
 
-<table class="rentals-table">
-    <thead>
-        <tr>
-            <th><a asp-action="Index" asp-route-sortBy="RentalDate" asp-route-sortDesc="@(Model.SortBy=="RentalDate" ? !Model.SortDescending : false)">Rental Date</a></th>
-            <th><a asp-action="Index" asp-route-sortBy="ReturnDate" asp-route-sortDesc="@(Model.SortBy=="ReturnDate" ? !Model.SortDescending : false)">Return Date</a></th>
-            <th><a asp-action="Index" asp-route-sortBy="TotalPrice" asp-route-sortDesc="@(Model.SortBy=="TotalPrice" ? !Model.SortDescending : false)">Total Price</a></th>
-            <th>Email</th>
-            <th>Car</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var rental in Model.Rentals)
-    {
-        <tr>
-            <td>@rental.RentalDate.ToShortDateString()</td>
-            <td>@rental.ReturnDate.ToShortDateString()</td>
-            <td>@rental.TotalPrice.ToString("C")</td>
-            <td>@rental.Email</td>
-            <td>@rental.Name @rental.Model (@rental.Year)</td>
-            <td>@(rental.PaymentStatus ? "Paid" : "Unpaid")</td>
-            <td>
-                <a asp-controller="Payments" asp-action="Create" asp-route-rentalId="@rental.RentalId">Make Payment</a>
-                <a asp-action="Details" asp-route-id="@rental.RentalId">Details</a> |
-                <a asp-action="Update" asp-route-id="@rental.RentalId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@rental.RentalId">Delete</a>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
-
-<a asp-action="Create">Create New Rental</a>
+    <div class="view-card">
+        <table class="view-table">
+            <thead>
+                <tr>
+                    <th><a asp-action="Index" asp-route-sortBy="RentalDate" asp-route-sortDesc="@(Model.SortBy=="RentalDate" ? !Model.SortDescending : false)" style="color: #F5F5F5; text-decoration: none;">Rental Date</a></th>
+                    <th><a asp-action="Index" asp-route-sortBy="ReturnDate" asp-route-sortDesc="@(Model.SortBy=="ReturnDate" ? !Model.SortDescending : false)" style="color: #F5F5F5; text-decoration: none;">Return Date</a></th>
+                    <th><a asp-action="Index" asp-route-sortBy="TotalPrice" asp-route-sortDesc="@(Model.SortBy=="TotalPrice" ? !Model.SortDescending : false)" style="color: #F5F5F5; text-decoration: none;">Total Price</a></th>
+                    <th>Email</th>
+                    <th>Car</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Rentals.Any()) {
+                    @foreach (var rental in Model.Rentals) {
+                        <tr>
+                            <td>@rental.RentalDate.ToShortDateString()</td>
+                            <td>@rental.ReturnDate.ToShortDateString()</td>
+                            <td>@rental.TotalPrice.ToString("C")</td>
+                            <td>@rental.Email</td>
+                            <td>@rental.Name @rental.Model (@rental.Year)</td>
+                            <td>
+                                <span class="badge @(rental.PaymentStatus ? "badge-success" : "badge-warning")">
+                                    @(rental.PaymentStatus ? "Paid" : "Unpaid")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a asp-controller="Payments" asp-action="Create" asp-route-rentalId="@rental.RentalId" class="btn btn-primary">Make Payment</a>
+                                    <a asp-action="Details" asp-route-id="@rental.RentalId" class="btn btn-outline-secondary">Details</a>
+                                    <a asp-action="Update" asp-route-id="@rental.RentalId" class="btn btn-primary">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@rental.RentalId" class="btn btn-danger">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                } else {
+                    <tr>
+                        <td colspan="7" class="empty-state">No rentals found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

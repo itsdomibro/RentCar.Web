@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web.Virtualization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -86,9 +87,28 @@ namespace RentCar.Web.Controllers
             customer.PhoneNumber = vm.PhoneNumber;
             customer.Address = vm.Address;
             customer.DriverLicenseNumber = vm.DriverLicenseNumber;
+
+            var oldRole = customer.Role;
             customer.Role = vm.Role;
 
             await _context.SaveChangesAsync();
+
+            if (oldRole != vm.Role)
+            {
+                var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, customer.CustomerId.ToString()),
+                        new Claim(ClaimTypes.Email, customer.Email),
+                        new Claim(ClaimTypes.Name, customer.Name),
+                        new Claim(ClaimTypes.Role, customer.Role)
+                    };
+
+                var identity = new ClaimsIdentity(claims, "Cookies");
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignOutAsync("Cookies");
+                await HttpContext.SignInAsync("Cookies", principal);
+            }
 
             return RedirectToAction(nameof(Index));
         }

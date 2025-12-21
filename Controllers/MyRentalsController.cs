@@ -113,7 +113,7 @@ namespace RentCar.Web.Controllers
             _context.Add(rental);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Rentals");
+            return RedirectToAction("Index", "MyRentals");
         }
     }
 }

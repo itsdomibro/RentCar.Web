@@ -75,7 +75,7 @@ namespace RentCar.Web.Controllers
 
             await HttpContext.SignInAsync("Cookies", principal);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Cars");
         }
 
         [HttpPost]
@@ -83,7 +83,7 @@ namespace RentCar.Web.Controllers
         {
             await HttpContext.SignOutAsync("Cookies");
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Cars");
         }
     }
 }

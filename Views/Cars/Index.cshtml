@@ -4,101 +4,93 @@
     ViewData["Title"] = "Cars";
 }
 
-<div class="container py-4">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
+<div class="page-container">
+    <div class="page-header">
         <div>
-            <h2 class="mb-0">Available Cars</h2>
-            <p class="text-muted mb-0">Filter by date, year, or price to find the right car.</p>
+            <h1 class="page-title">Available Cars</h1>
+            <p class="page-subtitle">Filter by date, year, or price to find the right car</p>
         </div>
-        <a asp-action="Create" class="btn btn-primary">Add a Car</a>
+        @if (User.IsInRole("Owner")) {
+            <a asp-action="Create" class="btn btn-primary">Add a Car</a>
+        }
     </div>
 
-    <div class="card shadow-sm mb-4">
-        <div class="card-body">
-            <form asp-action="Index" method="get" class="row g-3 align-items-end">
-                <div class="col-md-3">
-                    <label class="form-label">Pickup Date</label>
-                    <input type="date" name="pickupDate" value="@Model.PickupDate?.ToString("yyyy-MM-dd")" class="form-control" />
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label">Return Date</label>
-                    <input type="date" name="returnDate" value="@Model.ReturnDate?.ToString("yyyy-MM-dd")" class="form-control" />
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Year</label>
-                    <input type="number" name="year" value="@Model.Year" class="form-control" placeholder="e.g. 2024" />
-                </div>
-                <div class="col-md-2">
-                    <label class="form-label">Sort by</label>
-                    <select name="sortOrder" asp-items="ViewBag.SortOptions" class="form-select"></select>
-                </div>
-                <div class="col-md-2 d-grid">
-                    <button type="submit" class="btn btn-primary">Filter</button>
-                </div>
-            </form>
-        </div>
+    <div class="view-card">
+        <form asp-action="Index" method="get" class="filter-form">
+            <div class="form-group">
+                <label class="form-label">Pickup Date</label>
+                <input type="date" name="pickupDate" value="@Model.PickupDate?.ToString("yyyy-MM-dd")" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Return Date</label>
+                <input type="date" name="returnDate" value="@Model.ReturnDate?.ToString("yyyy-MM-dd")" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Year</label>
+                <input type="number" name="year" value="@Model.Year" class="form-control" placeholder="e.g. 2024" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Sort by</label>
+                <select name="sortOrder" asp-items="ViewBag.SortOptions" class="form-select"></select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0 align-middle">
-                <thead class="table-light">
-                    <tr>
-                        <th>Image</th>
-                        <th>Car</th>
-                        <th>Specs</th>
-                        <th>Price/Day</th>
-                        <th>Status</th>
-                        <th class="text-end">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.Cars.Any()) {
-                        @foreach (var car in Model.Cars) {
-                            <tr>
-                                <td style="width:130px">
-                                    @if (car.ImageUrls != null && car.ImageUrls.Any()) {
-                                        <img src="@car.ImageUrls.First()" width="120" class="img-thumbnail" />
-                                    } else {
-                                        <span class="text-muted">No image</span>
-                                    }
-                                </td>
-                                <td>
-                                    <div class="fw-semibold">@car.Name</div>
-                                    <div class="text-muted">@car.Model (@car.Year)</div>
-                                    <div class="text-muted small">Plate: @car.LicensePlate</div>
-                                </td>
-                                <td>
-                                    <div>@car.NumberOfCarSeats seats</div>
-                                    <div>@car.Transmission</div>
-                                </td>
-                                <td class="fw-semibold">@car.PricePerDay.ToString("C")</td>
-                                <td>
-                                    <span class="badge @(car.Status ? "bg-success" : "bg-secondary")">
-                                        @(car.Status ? "Available" : "Unavailable")
-                                    </span>
-                                </td>
-                                <td class="text-end">
-                                    <div class="btn-group btn-group-sm" role="group">
-                                        <a asp-action="Details" asp-route-id="@car.CarId" class="btn btn-outline-secondary">Details</a>
-                                        <a asp-action="Update" asp-route-id="@car.CarId" class="btn btn-outline-primary">Edit</a>
-                                        <a asp-action="Delete" asp-route-id="@car.CarId" class="btn btn-outline-danger">Delete</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
+    @if (Model.Cars.Any()) {
+        <div class="cards-grid">
+            @foreach (var car in Model.Cars) {
+                <div class="car-card">
+                    @if (car.ImageUrls != null && car.ImageUrls.Any()) {
+                        <img src="@car.ImageUrls.First()" alt="@car.Name" class="car-card-image" />
                     } else {
-                        <tr>
-                            <td colspan="6" class="text-center py-4 text-muted">No cars match your filters.</td>
-                        </tr>
+                        <div class="car-card-image" style="display: flex; align-items: center; justify-content: center; color: #999;">
+                            No image
+                        </div>
                     }
-                </tbody>
-            </table>
+                    
+                    <div class="car-card-body">
+                        <h3 class="car-card-title">@car.Name</h3>
+                        <p class="car-card-subtitle">@car.Model (@car.Year) - @car.LicensePlate</p>
+                        
+                        <div class="car-card-specs">
+                            <div>@car.NumberOfCarSeats seats</div>
+                            <div>@car.Transmission</div>
+                        </div>
+                        
+                        <div class="car-card-price">@car.PricePerDay.ToString("C")<span style="font-size: 0.9rem; font-weight: normal; color: #999;">/day</span></div>
+                        
+                        <div class="car-card-status">
+                            <span class="badge @(car.Status ? "badge-success" : "badge-secondary")">
+                                @(car.Status ? "Available" : "Unavailable")
+                            </span>
+                        </div>
+                        
+                        <div class="car-card-actions">
+                            @if (User.IsInRole("Owner")) {
+                                <a asp-action="Details" asp-route-id="@car.CarId" class="btn btn-outline-secondary">Details</a>
+                                <a asp-action="Update" asp-route-id="@car.CarId" class="btn btn-primary">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@car.CarId" class="btn btn-danger">Delete</a>
+                            } else {
+                                <a asp-controller="MyRentals" asp-action="Create" asp-route-id="@car.CarId" class="btn btn-primary" style="width: 100%;">Rent</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
+    } else {
+        <div class="view-card">
+            <div class="empty-state">No cars match your filters.</div>
+        </div>
+    }
 
-        <div class="card-footer d-flex justify-content-between align-items-center">
-            <span>Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalCars / Model.PageSize))</span>
-            <div class="btn-group">
+    <div class="view-card">
+        <div class="pagination">
+            <div class="pagination-info">Page @Model.PageNumber of @(Math.Ceiling((double)Model.TotalCars / Model.PageSize))</div>
+            <div class="pagination-buttons">
                 <a asp-action="Index"
                    asp-route-pageNumber="@(Model.PageNumber - 1)"
                    asp-route-pickupDate="@Model.PickupDate"

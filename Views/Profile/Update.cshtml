@@ -4,46 +4,67 @@
     ViewData["Title"] = "Update Profile";
 }
 
-<h2>Update Profile</h2>
-
-<form asp-action="Update" method="post">
-    @Html.AntiForgeryToken()
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+<div class="page-container">
+    <div class="page-header">
+        <div>
+            <h1 class="page-title">Update Profile</h1>
+            <p class="page-subtitle">Edit your account information</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to Profile</a>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+    <div class="view-card">
+        <form asp-action="Update" method="post" class="view-form" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-    <div class="form-group">
-        <label asp-for="PhoneNumber"></label>
-        <input asp-for="PhoneNumber" class="form-control" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="Name" class="form-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="Address"></label>
-        <input asp-for="Address" class="form-control" />
-        <span asp-validation-for="Address" class="text-danger"></span>
-    </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
 
-    <div class="form-group">
-        <label asp-for="DriverLicenseNumber"></label>
-        <input asp-for="DriverLicenseNumber" class="form-control" />
-        <span asp-validation-for="DriverLicenseNumber" class="text-danger"></span>
-    </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="Role"></label>
-        <input asp-for="Role" class="form-control" />
-        <span asp-validation-for="Role" class="text-danger"></span>
-    </div>
+                <div class="form-group">
+                    <label asp-for="Address" class="form-label">Address</label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
 
-    <button type="submit" class="btn btn-success">Save Changes</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+            <div class="form-group">
+                <label asp-for="DriverLicenseNumber" class="form-label">Driver License Number</label>
+                <input asp-for="DriverLicenseNumber" class="form-control" />
+                <span asp-validation-for="DriverLicenseNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Role" class="form-label">Role</label>
+                <input asp-for="Role" class="form-control" readonly />
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
