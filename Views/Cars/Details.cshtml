@@ -12,9 +12,12 @@
         </div>
         <div class="action-buttons">
             <a asp-action="Index" class="btn btn-outline-secondary">Back</a>
-            <a asp-controller="MyRentals" asp-action="Create" asp-route-id="@Model.CarId" class="btn btn-primary">Rent</a>
-            <a asp-action="Update" asp-route-id="@Model.CarId" class="btn btn-primary">Edit</a>
-            <a asp-action="Delete" asp-route-id="@Model.CarId" class="btn btn-danger">Delete</a>
+            @if (User.IsInRole("Owner")) {
+                <a asp-action="Update" asp-route-id="@Model.CarId" class="btn btn-primary">Edit</a>
+                <a asp-action="Delete" asp-route-id="@Model.CarId" class="btn btn-danger">Delete</a>
+            } else {
+                <a asp-controller="MyRentals" asp-action="Create" asp-route-id="@Model.CarId" class="btn btn-primary">Rent</a>
+            }
         </div>
     </div>
 

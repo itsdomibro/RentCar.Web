@@ -10,10 +10,10 @@
             <h3>Delete Car</h3>
             <p>Are you sure you want to delete <strong>@Model.DisplayName</strong>?</p>
             <form asp-action="Delete" asp-antiforgery="true" style="display: flex; gap: 1rem; justify-content: center;">
-                <input type="hidden" asp-for="CarId" />
+    <input type="hidden" asp-for="CarId" />
                 <button type="submit" class="btn btn-danger">Delete</button>
                 <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-            </form>
+</form>
         </div>
     </div>
 </div>

@@ -74,7 +74,7 @@
                                 <a asp-action="Update" asp-route-id="@car.CarId" class="btn btn-primary">Edit</a>
                                 <a asp-action="Delete" asp-route-id="@car.CarId" class="btn btn-danger">Delete</a>
                             } else {
-                                <a asp-controller="MyRentals" asp-action="Create" asp-route-id="@car.CarId" class="btn btn-primary" style="width: 100%;">Rent</a>
+                                <a asp-action="Details" asp-route-id="@car.CarId" class="btn btn-primary" style="width: 100%;">Rent</a>
                             }
                         </div>
                     </div>
